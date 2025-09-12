@@ -107,122 +107,83 @@ def extract_keywords(text: str) -> List[str]:
     # Remove common stop words
     stop_words = {'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
     keywords = [word for word in words if word not in stop_words and len(word) > 2]
+    
+    return list(set(keywords))  # Remove duplicates
 
-    return list(set(keywords))
-def hash_password(password: str) -> str:
-    """Hash password using SHA-256"""
-    salt = secrets.token_hex(16)
-    hash_obj = hashlib.sha256((salt + password).encode('utf-8'))
-    return f"{salt}${hash_obj.hexdigest()}"
-def verify_password(stored_password: str, provided_password: str) -> bool:
-    """Verify provided password against stored hash"""
-    try:
-        salt, hash_val = stored_password.split('$')
-        hash_obj = hashlib.sha256((salt + provided_password).encode('utf-8'))
-        return hash_obj.hexdigest() == hash_val
-    except ValueError:
-        return False
-def generate_password_reset_token() -> str:
-    """Generate a secure password reset token"""
-    return secrets.token_urlsafe(32)
-def is_token_expired(expiry_time: datetime) -> bool:
-    """Check if a token is expired"""
-    return datetime.utcnow() > expiry_time
-def set_token_expiry(minutes: int = 30) -> datetime:
-    """Set token expiry time"""
-    return datetime.utcnow() + timedelta(minutes=minutes)
-def log_event(event_type: str, message: str, user_id: Optional[str] = None) -> None:
-    """Log events for auditing"""
-    log_message = f"{datetime.utcnow().isoformat()} | {event_type} | {message}"
-    if user_id:
-        log_message += f" | User ID: {user_id}"
-    logger.info(log_message)
-    'admin': ['add_user', 'delete_user', 'view_reports', 'configure_system'],
-def user_has_permission(user_role: str, permission: str) -> bool:
-    """Check if user has specific permission based on role"""
-    role_permissions = {
-        'admin': ['add_user', 'delete_user', 'view_reports', 'configure_system'],
-        'manager': ['view_reports', 'approve_applications'],
-        'analyst': ['view_reports', 'create_applications'],
-        'viewer': ['view_reports'],
-    }
-    return permission in role_permissions.get(user_role, [])
-def paginate_queryset(queryset: List[Any], page: int, page_size: int) -> Dict[str, Any]:
-    """Paginate a list-based queryset"""
-    total_items = len(queryset)
-    total_pages = (total_items + page_size - 1) // page_size
-    start = (page - 1) * page_size
-    end = start + page_size
-    paginated_items = queryset[start:end]
+def calculate_business_days(start_date: datetime, end_date: datetime) -> int:
+    """Calculate business days between two dates"""
+    current = start_date
+    business_days = 0
+    
+    while current <= end_date:
+        if current.weekday() < 5:  # Monday = 0, Friday = 4
+            business_days += 1
+        current += timedelta(days=1)
+    
+    return business_days
+
+def get_financial_year(date: datetime = None) -> str:
+    """Get financial year (July to June in Bangladesh)"""
+    if date is None:
+        date = datetime.now()
+    
+    if date.month >= 7:
+        return f"FY{date.year}-{date.year + 1}"
+    else:
+        return f"FY{date.year - 1}-{date.year}"
+
+def validate_business_type(business_type: str) -> bool:
+    """Validate business type against allowed types"""
+    allowed_types = [
+        'grocery_shop', 'cosmetics', 'medicine', 'clothing_shop', 'wholesalers',
+        'bakery', 'restaurant', 'library', 'hardware', 'sanitary', 'tea_stall',
+        'motor_parts', 'sports_shop', 'tailor', 'shoe_seller', 'plastic_items',
+        'salon', 'ladies_parlor', 'poultry_shop', 'vegetable_shop', 'garage',
+        'super_shop', 'mobile_shop', 'accessories', 'servicing', 'wood_shop',
+        'sub_contract_factory', 'gold_ornaments_seller', 'other'
+    ]
+    
+    normalized_type = business_type.lower().replace(' ', '_').replace('-', '_')
+    return normalized_type in allowed_types
+
+def calculate_loan_emi(principal: Decimal, annual_rate: Decimal, tenure_months: int) -> Decimal:
+    """Calculate EMI using reducing balance method"""
+    if annual_rate == 0:
+        return principal / tenure_months
+    
+    monthly_rate = annual_rate / (12 * 100)
+    
+    emi = principal * monthly_rate * (1 + monthly_rate) ** tenure_months / \
+          ((1 + monthly_rate) ** tenure_months - 1)
+    
+    return emi.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+def generate_hash(data: str, algorithm: str = 'sha256') -> str:
+    """Generate hash for data integrity"""
+    hash_obj = hashlib.new(algorithm)
+    hash_obj.update(data.encode('utf-8'))
+    return hash_obj.hexdigest()
+
+def paginate_queryset(queryset, page: int, page_size: int = 20):
+    """Paginate queryset with metadata"""
+    total_count = queryset.count()
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
+    
+    items = queryset[start_index:end_index]
+    
+    total_pages = (total_count + page_size - 1) // page_size
     
     return {
-        'page': page,
-        'page_size': page_size,
-        'total_items': total_items,
-        'total_pages': total_pages,
-        'items': paginated_items
+        'items': items,
+        'pagination': {
+            'current_page': page,
+            'page_size': page_size,
+            'total_count': total_count,
+            'total_pages': total_pages,
+            'has_next': page < total_pages,
+            'has_previous': page > 1,
+            'next_page': page + 1 if page < total_pages else None,
+            'previous_page': page - 1 if page > 1 else None,
+        }
     }
-def sort_queryset(queryset: List[Dict[str, Any]], sort_by: str, descending: bool = False) -> List[Dict[str, Any]]:
-    """Sort a list-based queryset by a specific field"""
-    try:
-        return sorted(queryset, key=lambda x: x.get(sort_by), reverse=descending)
-    except KeyError:
-        return queryset
-def filter_queryset(queryset: List[Dict[str, Any]], filters: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Filter a list-based queryset based on provided filters"""
-    def matches_filters(item: Dict[str, Any]) -> bool:
-        for key, value in filters.items():
-            if item.get(key) != value:
-                return False
-        return True
-    
-    return [item for item in queryset if matches_filters(item)]
-def transform_data(data: List[Dict[str, Any]], transformations: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Transform data based on provided transformation rules"""
-    transformed_data = []
-    for item in data:
-        new_item = item.copy()
-        for key, func in transformations.items():
-            if key in new_item:
-                new_item[key] = func(new_item[key])
-        transformed_data.append(new_item)
-    return transformed_data
-def generate_report(data: List[Dict[str, Any]], report_type: str) -> str:
-    """Generate a simple text-based report"""
-    report_lines = [f"Report Type: {report_type}", f"Generated At: {datetime.utcnow().isoformat()}", "-"*40]
-    for item in data:
-        line = ", ".join(f"{k}: {v}" for k, v in item.items())
-        report_lines.append(line)
-    return "\n".join(report_lines)
-def export_to_csv(data: List[Dict[str, Any]], file_path: str) -> None:
-    """Export data to a CSV file"""
-    import csv
-    if not data:
-        return
-    
-    keys = data[0].keys()
-    with open(file_path, 'w', newline='', encoding='utf-8') as output_file:
-        dict_writer = csv.DictWriter(output_file, fieldnames=keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(data)
-def export_to_json(data: List[Dict[str, Any]], file_path: str) -> None:
-    """Export data to a JSON file"""
-    import json
-    with open(file_path, 'w', encoding='utf-8') as output_file:
-        json.dump(data, output_file, ensure_ascii=False, indent=4)
-def export_to_excel(data: List[Dict[str, Any]], file_path: str) -> None:
-    """Export data to an Excel file"""
-    import pandas as pd
-    if not data:
-        return
-    
-    df = pd.DataFrame(data)
-    df.to_excel(file_path, index=False)
-def import_from_csv(file_path: str) -> List[Dict[str, Any]]:
-    """Import data from a CSV file"""
-    import csv
-    with open(file_path, 'r', encoding='utf-8') as input_file:
-        dict_reader = csv.DictReader(input_file)
-        return list(dict_reader)
-def import_from_json(file_path: str) -> List[Dict[str, Any]]:
-    

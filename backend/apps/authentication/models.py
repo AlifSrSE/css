@@ -1238,5 +1238,3 @@ class UserDataImportRequest(Document):
         self.status = 'completed'
         self.completed_at = datetime.utcnow()
         self.save()
-    def mark_failed(self, errors):
-        
