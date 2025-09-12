@@ -1,4 +1,3 @@
-// src/store/api/scoringApi.ts
 import { baseApi } from './baseApi';
 import type {
   CreditApplication,

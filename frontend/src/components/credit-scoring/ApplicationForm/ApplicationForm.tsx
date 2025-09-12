@@ -1,4 +1,3 @@
-// src/components/credit-scoring/ApplicationForm/ApplicationForm.tsx
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -366,7 +365,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -466,7 +465,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -484,7 +483,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -502,7 +501,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -520,7 +519,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -538,7 +537,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -556,7 +555,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -574,7 +573,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -597,7 +596,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -615,7 +614,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -633,7 +632,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -651,7 +650,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="0"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />
@@ -747,7 +746,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                                 type="number"
                                 min="0"
                                 placeholder="0"
-                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                               />
                             )}
                           />
@@ -764,7 +763,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                                 type="number"
                                 min="0"
                                 placeholder="0"
-                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                               />
                             )}
                           />
@@ -781,7 +780,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                                 type="number"
                                 min="0"
                                 placeholder="0"
-                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                               />
                             )}
                           />
@@ -799,7 +798,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                                 min="0"
                                 max="100"
                                 placeholder="0"
-                                onChange={(e) => field.onChange(Number(e.target.value))}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                               />
                             )}
                           />
@@ -847,7 +846,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
                           type="number"
                           min="1"
                           placeholder="0"
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => field.onChange(Number(e.target.value))}
                         />
                       )}
                     />

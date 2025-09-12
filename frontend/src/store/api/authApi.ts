@@ -1,4 +1,3 @@
-// src/store/api/authApi.ts
 import { baseApi } from './baseApi';
 import type { AuthState } from '../../types/auth';
 

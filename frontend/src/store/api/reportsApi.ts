@@ -1,4 +1,3 @@
-// src/store/api/reportsApi.ts
 import { baseApi } from './baseApi';
 import type { ScoreBreakdownReport, ApiResponse } from '../../types/scoring';
 

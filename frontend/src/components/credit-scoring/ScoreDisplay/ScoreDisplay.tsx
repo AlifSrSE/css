@@ -1,4 +1,3 @@
-// src/components/credit-scoring/ScoreDisplay/ScoreDisplay.tsx
 import React, { useState } from 'react';
 import {
   Card,

@@ -1,4 +1,3 @@
-// src/store/api/analyticsApi.ts
 import { baseApi } from './baseApi';
 
 interface AnalyticsData {

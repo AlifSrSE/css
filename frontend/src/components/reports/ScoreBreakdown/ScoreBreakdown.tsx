@@ -46,34 +46,34 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
   const componentData = [
     {
       name: 'Data Points',
-      score: breakdown.data.component_scores.data_points.score,
-      percentage: breakdown.data.component_scores.data_points.percentage,
+      score: breakdown.component_scores.data_points.score,
+      percentage: breakdown.component_scores.data_points.percentage,
       color: '#8B5CF6'
     },
     {
       name: 'Credit Ratios',
-      score: breakdown.data.component_scores.credit_ratios.score,
-      percentage: breakdown.data.component_scores.credit_ratios.percentage,
+      score: breakdown.component_scores.credit_ratios.score,
+      percentage: breakdown.component_scores.credit_ratios.percentage,
       color: '#06B6D4'
     },
     {
       name: '5C Attributes',
-      score: breakdown.data.component_scores.borrower_attributes.score,
-      percentage: breakdown.data.component_scores.borrower_attributes.percentage,
+      score: breakdown.component_scores.borrower_attributes.score,
+      percentage: breakdown.component_scores.borrower_attributes.percentage,
       color: '#84CC16'
     }
   ];
 
-  if (breakdown.data.component_scores.psychometric) {
+  if (breakdown.component_scores.psychometric) {
     componentData.push({
       name: 'Psychometric',
-      score: breakdown.data.component_scores.psychometric.score,
-      percentage: breakdown.data.component_scores.psychometric.adjustment,
+      score: breakdown.component_scores.psychometric.score,
+      percentage: breakdown.component_scores.psychometric.adjustment,
       color: '#F97316'
     });
   }
 
-  const ratiosData = breakdown.data.component_scores.credit_ratios.ratios.map(ratio => ({
+  const ratiosData = breakdown.component_scores.credit_ratios.ratios.map(ratio => ({
     name: ratio.name.replace('_', ' ').toUpperCase(),
     value: ratio.value,
     score: ratio.score,
@@ -90,11 +90,11 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
             <div>
               <CardTitle>Score Breakdown Report</CardTitle>
               <p className="text-sm text-gray-600 mt-1">
-                Application: {breakdown.data.application_id}
+                Application: {breakdown.application_id}
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <StatusBadge status={breakdown.data.grade as any} />
+              <StatusBadge status={breakdown.grade as any} />
               <Button size="sm" variant="outline">
                 <Download className="h-4 w-4 mr-2" />
                 Export
@@ -107,28 +107,28 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600">
-                {breakdown.data.final_score.toFixed(1)}
+                {breakdown.final_score.toFixed(1)}
               </div>
               <p className="text-sm text-gray-600">Final Score</p>
             </div>
             
             <div className="text-center">
               <div className="text-2xl font-semibold text-green-600">
-                Grade {breakdown.data.grade}
+                Grade {breakdown.grade}
               </div>
               <p className="text-sm text-gray-600">Credit Grade</p>
             </div>
             
             <div className="text-center">
               <div className="text-lg font-semibold text-orange-600">
-                {breakdown.data.risk_assessment.level.replace('_', ' ').toUpperCase()}
+                {breakdown.risk_assessment.level.replace('_', ' ').toUpperCase()}
               </div>
               <p className="text-sm text-gray-600">Risk Level</p>
             </div>
             
             <div className="text-center">
               <div className="text-lg font-semibold text-purple-600">
-                {(breakdown.data.risk_assessment.probability * 100).toFixed(1)}%
+                {(breakdown.risk_assessment.probability * 100).toFixed(1)}%
               </div>
               <p className="text-sm text-gray-600">Default Risk</p>
             </div>
@@ -224,8 +224,8 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
                   <YAxis dataKey="name" type="category" width={100} />
                   <Tooltip />
                   <Bar dataKey="score" fill="#8884d8">
-                    {ratiosData.map((entry, index) => (
-                      <Bar key={`bar-${index}`} fill={entry.color} />
+                    {ratiosData.map((entry: { color: string }, index: number) => (
+                        <Bar key={`bar-${index}`} fill={entry.color} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -233,7 +233,7 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
               
               {/* Ratios Detail */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                {breakdown.data.component_scores.credit_ratios.ratios.map((ratio, index) => (
+                {breakdown.component_scores.credit_ratios.ratios.map((ratio: any, index: any) => (
                   <div key={index} className="p-3 border rounded-lg">
                     <div className="flex justify-between items-center">
                       <h4 className="font-medium capitalize">
@@ -260,7 +260,7 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                {Object.entries(breakdown.data.component_scores.borrower_attributes.components).map(([category, data]: [string, any]) => (
+                {Object.entries(breakdown.component_scores.borrower_attributes.components).map(([category, data]: [string, any]) => (
                   <div key={category} className="text-center p-4 bg-gray-50 rounded-lg">
                     <h4 className="font-medium mb-2 capitalize">{category}</h4>
                     <div className="text-2xl font-bold text-green-600">{data.score}</div>
@@ -275,14 +275,14 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
           </Card>
 
           {/* Psychometric Results */}
-          {breakdown.data.component_scores.psychometric && (
+          {breakdown.component_scores.psychometric && (
             <Card>
               <CardHeader>
                 <CardTitle>Psychometric Assessment</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                  {Object.entries(breakdown.data.component_scores.psychometric.profile).map(([dimension, score]: [string, any]) => (
+                  {Object.entries(breakdown.component_scores.psychometric.profile).map(([dimension, score]: [string, any]) => (
                     <div key={dimension} className="text-center p-4 bg-blue-50 rounded-lg">
                       <h4 className="font-medium mb-2 capitalize">{dimension.replace('_', ' ')}</h4>
                       <div className="text-xl font-bold text-blue-600">{score}/20</div>
@@ -294,9 +294,9 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
                 </div>
                 <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                   <p className="text-sm text-blue-800">
-                    <strong>Overall Score:</strong> {breakdown.data.component_scores.psychometric.score}/100
+                    <strong>Overall Score:</strong> {breakdown.component_scores.psychometric.score}/100
                     <span className="ml-4">
-                      <strong>Adjustment:</strong> {breakdown.data.component_scores.psychometric.adjustment > 0 ? '+' : ''}{breakdown.data.component_scores.psychometric.adjustment} points
+                      <strong>Adjustment:</strong> {breakdown.component_scores.psychometric.adjustment > 0 ? '+' : ''}{breakdown.component_scores.psychometric.adjustment} points
                     </span>
                   </p>
                 </div>
@@ -336,11 +336,11 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h4 className="font-medium mb-3">Risk Factors</h4>
-              {breakdown.data.risk_assessment.factors.length === 0 ? (
+              {breakdown.risk_assessment.factors.length === 0 ? (
                 <p className="text-green-600 text-sm">No significant risk factors identified</p>
               ) : (
                 <div className="space-y-2">
-                  {breakdown.data.risk_assessment.factors.map((factor, index) => (
+                  {breakdown.risk_assessment.factors.map((factor: any, index: any) => (
                     <div key={index} className="flex items-center gap-2 text-sm">
                       <AlertTriangle className="h-4 w-4 text-orange-500" />
                       <span>{factor}</span>
@@ -353,7 +353,7 @@ export const ScoreBreakdown: React.FC<ScoreBreakdownProps> = ({ applicationId, c
             <div>
               <h4 className="font-medium mb-3">Recommendations</h4>
               <div className="space-y-2">
-                {breakdown.data.recommendations.map((recommendation, index) => (
+                {breakdown.recommendations.map((recommendation: any, index: any) => (
                   <div key={index} className="flex items-start gap-2 text-sm">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                     <span>{recommendation}</span>

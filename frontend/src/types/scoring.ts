@@ -1,4 +1,3 @@
-// src/types/scoring.ts
 export interface BorrowerInfo {
   full_name: string;
   phone: string;
@@ -239,10 +238,44 @@ export interface ScoreBreakdownReport {
 
 // Form Types
 export interface ApplicationFormData {
-  borrower_info: Partial<BorrowerInfo>;
-  business_data: Partial<BusinessData>;
-  financial_data: Partial<FinancialData>;
-  loan_details: {
+  borrower_info: {
+    full_name: string;
+    phone: string;
+    national_id: string;
+    address: string;
+    residency_status: 'permanent' | 'temporary';
+    email?: string;  // optional
+    years_of_residency?: number;
+    guarantor_category?: 'strong' | 'medium' | 'weak';
+  };
+  business_data: {
+    business_name: string;
+    business_type: string;
+    seller_type?: 'wholesaler' | 'retailer';
+    years_of_operation?: number;
+    average_daily_sales?: number;
+    last_month_sales?: number;
+    inventory_value_present?: number;
+    total_expense_last_month?: number;
+    personal_expense?: number;
+    rent_advance?: number;
+  };
+  financial_data: {
+    monthly_income?: number;
+    bank_transaction_volume_1y?: number;
+    mfs_transaction_volume_monthly?: number;
+    total_assets?: number;
+    existing_loans: Array<{
+      fi_name: string;
+      fi_type: 'supplier' | 'mfi' | 'nbfi' | 'bank' | 'drutoloan';
+      loan_amount: number;
+      outstanding_loan: number;
+      monthly_installment: number;
+      repaid_percentage: number;
+      repayment_status: 'on_time' | 'overdue_3_days' | 'overdue_7_days' | 'default';
+    }>;
+  };
+  loan_details?: {
     amount_requested?: number;
     purpose?: string;
   };
