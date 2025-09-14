@@ -17,26 +17,18 @@ export interface BusinessData {
   years_of_operation?: number;
   trade_license_age?: number;
   seller_type?: 'wholesaler' | 'retailer';
-  
-  // Sales and Revenue
   average_daily_sales?: number;
   last_month_sales?: number;
   sales_history_12m_avg?: number;
   other_income_last_month?: number;
-  
-  // Inventory and Stock
   inventory_value_present?: number;
   product_purchase_last_month?: number;
   stock_history_12m_avg?: number;
-  
-  // Expenses
   total_expense_last_month?: number;
   salary_expense_last_month?: number;
   rent_utility_expense_last_month?: number;
   expense_history_12m_avg?: number;
   personal_expense?: number;
-  
-  // Operations
   cash_on_delivery_12m_avg?: number;
   deliveries_last_month?: number;
   rent_advance?: number;
@@ -108,9 +100,7 @@ export interface PsychometricResult {
 
 export interface CreditScore {
   id: string;
-  application: string; // Application ID reference
-  
-  // Component Scores
+  application: string;
   data_points_score: number;
   data_points_breakdown: Record<string, any>;
   credit_ratios_score: number;
@@ -118,28 +108,21 @@ export interface CreditScore {
   borrower_attributes_score: number;
   borrower_attributes_breakdown: Record<string, any>;
   psychometric_result?: PsychometricResult;
-  
-  // Final Results
   total_points: number;
   grade: 'A' | 'B' | 'C' | 'R';
   loan_slab_adjustment: string;
   risk_level: 'low' | 'medium' | 'high' | 'very_high';
   default_probability: number;
-  
-  // Analysis
   red_flags: RedFlag[];
   recommendations: string[];
   max_loan_amount: number;
   recommended_interest_rate?: number;
   recommended_tenure_months?: number;
-  
-  // Metadata
   calculated_at: string;
   calculated_by: string;
   version: string;
 }
 
-// Psychometric Test Types
 export interface PsychometricQuestion {
   id: string;
   dimension: string;
@@ -165,7 +148,6 @@ export interface PsychometricTestSession {
   is_completed: boolean;
 }
 
-// API Response Types
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -183,7 +165,6 @@ export interface PaginatedResponse<T> {
   total_pages: number;
 }
 
-// Dashboard Types
 export interface DashboardStats {
   total_applications: number;
   pending_applications: number;
@@ -200,7 +181,6 @@ export interface DashboardStats {
   }>;
 }
 
-// Report Types
 export interface ScoreBreakdownReport {
   application_id: string;
   borrower_name: string;
@@ -236,7 +216,6 @@ export interface ScoreBreakdownReport {
   recommendations: string[];
 }
 
-// Form Types
 export interface ApplicationFormData {
   borrower_info: {
     full_name: string;
@@ -244,7 +223,7 @@ export interface ApplicationFormData {
     national_id: string;
     address: string;
     residency_status: 'permanent' | 'temporary';
-    email?: string;  // optional
+    email?: string;
     years_of_residency?: number;
     guarantor_category?: 'strong' | 'medium' | 'weak';
   };
@@ -291,7 +270,6 @@ export interface FormValidationResult {
   warnings: string[];
 }
 
-// Filter and Search Types
 export interface ApplicationFilters {
   status?: string;
   grade?: string;
@@ -309,7 +287,6 @@ export interface SortOptions {
   direction: 'asc' | 'desc';
 }
 
-// Chart Data Types
 export interface ChartDataPoint {
   label: string;
   value: number;
@@ -322,7 +299,6 @@ export interface TrendDataPoint {
   label?: string;
 }
 
-// Component Props Types
 export interface ScoreDisplayProps {
   score: CreditScore;
   showDetails?: boolean;
@@ -342,7 +318,6 @@ export interface PsychometricTestProps {
   isLoading?: boolean;
 }
 
-// State Types
 export interface AuthState {
   user: {
     id: string;
