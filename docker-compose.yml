@@ -1,6 +1,4 @@
 # docker-compose.yml
-version: '3.8'
-
 services:
   # MongoDB
   mongodb:
@@ -8,7 +6,7 @@ services:
     container_name: credit_scoring_mongodb
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -39,7 +37,7 @@ services:
     container_name: credit_scoring_backend
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8030:8000"
     environment:
       - DEBUG=True
       - MONGODB_URI=mongodb://admin:password@mongodb:27017/credit_scoring?authSource=admin
@@ -105,9 +103,9 @@ services:
     container_name: credit_scoring_frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3030:3000"
     environment:
-      - REACT_APP_API_BASE_URL=http://localhost:8000/api/
+      - REACT_APP_API_BASE_URL=http://localhost:8030/api/
       - REACT_APP_ENVIRONMENT=development
     volumes:
       - ./frontend:/app
@@ -116,7 +114,7 @@ services:
       - backend
     networks:
       - credit_scoring_network
-    command: ["npm", "start"]
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
   # Nginx (Production only)
   nginx:

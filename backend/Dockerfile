@@ -21,8 +21,8 @@ COPY . .
 # Create logs directory
 RUN mkdir -p logs
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Collect static files (disabled during build, will be done at runtime)
+# RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 

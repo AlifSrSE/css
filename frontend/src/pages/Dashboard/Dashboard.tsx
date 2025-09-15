@@ -46,7 +46,8 @@ import {
   Filter,
   Download,
 } from 'lucide-react';
-import { useGetDashboardStatsQuery, useGetAnalyticsQuery } from '../../store/api/scoringApi';
+import { useGetDashboardStatsQuery } from '../../store/api/scoringApi';
+import { useGetAnalyticsQuery } from '../../store/api/analyticsApi';
 import { useGetPerformanceMetricsQuery } from '../../store/api/analyticsApi';
 
 const Dashboard: React.FC = () => {
@@ -264,7 +265,7 @@ const Dashboard: React.FC = () => {
                   {gradeData.map((entry) => (
                     <Cell key={`cell-${entry.grade}`} fill={COLORS[entry.grade as keyof typeof COLORS]} />
                   ))}
-                </
+                </Pie>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
@@ -321,13 +322,21 @@ const Dashboard: React.FC = () => {
         <CardContent>
           {performanceMetrics ? (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {performanceMetrics.map((metric) => (
-                <div key={metric.name} className="p-4 border rounded-lg">
-                  <h3 className="text-lg font-medium text-gray-900">{metric.name}</h3>
-                  <p className="text-2xl font-bold text-gray-900 mt-2">{metric.value}</p>
-                  <p className="text-sm text-gray-600 mt-1">{metric.description}</p>
-                </div>
-              ))}
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900">Model Accuracy</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-2">{(performanceMetrics.model_accuracy * 100).toFixed(1)}%</p>
+                <p className="text-sm text-gray-600 mt-1">Overall model accuracy</p>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900">False Positive Rate</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-2">{(performanceMetrics.false_positive_rate * 100).toFixed(1)}%</p>
+                <p className="text-sm text-gray-600 mt-1">Rate of false positives</p>
+              </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="text-lg font-medium text-gray-900">False Negative Rate</h3>
+                <p className="text-2xl font-bold text-gray-900 mt-2">{(performanceMetrics.false_negative_rate * 100).toFixed(1)}%</p>
+                <p className="text-sm text-gray-600 mt-1">Rate of false negatives</p>
+              </div>
             </div>
           ) : (
             <div className="text-center text-gray-600">No performance metrics available.</div>
